@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SignUpTab } from "./_components/sign-up-tab";
+import { SignInTab } from "./_components/sign-in-tab";
 
 export default function LoginPage() {
     return <Tabs defaultValue="signin" className="max-auto w-full py-6 px-4">
@@ -13,7 +15,7 @@ export default function LoginPage() {
                     <CardTitle>Sign IN</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p>Sign in form goes here</p>
+                    <SignInTab />
                 </CardContent>
             </TabsContent>
             <TabsContent value="signup">
@@ -21,7 +23,7 @@ export default function LoginPage() {
                     <CardTitle>Sign Up</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p>Sign up form goes here</p>
+                    <SignUpTab />
                 </CardContent>
             </TabsContent>
         </Card>
