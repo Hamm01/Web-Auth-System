@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
+import { authClient } from "@/lib/auth-client"
+import { toast } from "sonner"
 
 const signUpSchema = z.object({
     name: z.string().min(1),
@@ -17,6 +19,7 @@ const signUpSchema = z.object({
 type SignUpForm = z.infer<typeof signUpSchema>
 
 export function SignUpTab() {
+
     const form = useForm<SignUpForm>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
@@ -27,7 +30,14 @@ export function SignUpTab() {
     })
     const { isSubmitting } = form.formState
     async function handleSignUp(data: SignUpForm) {
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await authClient.signUp.email({ ...data, callbackURL: "/" }, {
+            onError: (error) => {
+                toast.error(error.error.message || "Failed to Sign Up")
+            },
+            onSuccess: () => {
+                console.log("success")
+            },
+        })
 
     }
 
