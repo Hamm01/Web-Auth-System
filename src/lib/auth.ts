@@ -2,10 +2,23 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '@/drizzle/db' // your drizzle instance
 import { nextCookies } from 'better-auth/next-js'
+import { sendPasswordResetEmail } from './emails/password-reset-email'
+import { sendEmailVerification } from './emails/email-verification'
 
 export const auth = betterAuth({
   emailAndPassword: {
-    enabled: true
+    enabled: true,
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendPasswordResetEmail({ user, url })
+    }
+  },
+  emailVerification: {
+    autoSignInAfterVerification: true,
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmailVerification({ user, url })
+    }
   },
   socialProviders: {
     github: {
