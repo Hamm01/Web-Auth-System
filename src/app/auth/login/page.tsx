@@ -6,12 +6,17 @@ import { SignUpTab } from "./_components/sign-up-tab";
 import { SignInTab } from "./_components/sign-in-tab";
 import { Separator } from "@/components/ui/separator";
 import { SocialAuthButtons } from "./_components/social-auth-buttons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { EmailVerification } from "./_components/email-verfication";
+
+type Tab = "signin" | "signup" | "email-verification"
 
 export default function LoginPage() {
     const router = useRouter()
+    const [email, setEmail] = useState<string>("test@test.com")
+    const [selectedTab, setSelectedTab] = useState<Tab>("email-verification")
     useEffect(() => {
 
         authClient.getSession().then(session => {
@@ -20,7 +25,7 @@ export default function LoginPage() {
             }
         })
     }, [router])
-    return <Tabs defaultValue="signin" className="max-auto w-full py-6 px-4">
+    return <Tabs value={selectedTab} onValueChange={t => setSelectedTab(t as Tab)} className="max-auto w-full py-6 px-4">
         <TabsList >
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -47,6 +52,22 @@ export default function LoginPage() {
                 <CardContent>
                     <SignUpTab />
                 </CardContent>
+                <Separator />
+                <CardFooter className="grid grid-cols-2 gap-3">
+                    <SocialAuthButtons />
+                </CardFooter>
+            </Card>
+        </TabsContent>
+        <TabsContent value="email-verification">
+            <Card>
+                <CardHeader className="text-2xl font-bold">
+                    <CardTitle>verify your email</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <EmailVerification email={email} />
+                </CardContent>
+                <Separator />
+
             </Card>
         </TabsContent>
     </Tabs>
